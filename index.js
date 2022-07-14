@@ -6,15 +6,62 @@ const rows = canvas.height / scale;
 const columns = canvas.width / scale;
 
 var snake;
-var apple
+var apple;
+let addTime = 0.1;
+let interval = 100;
+let fastEnabled = false;
+let turboEnabled = false;
+let timer = 0;
+let score = 0;
 
-(function setup() {
-	snake = new Snake();
-	apple = new Apple();
-	apple.generate();
 
-	let score = 0;
-	window.setInterval (() => {
+function setFast() {
+	if(fastEnabled) {
+		document.getElementById('fast').style.backgroundColor = "red";
+		document.getElementById('fast').value = "FAST Disabled";
+		fastEnabled = false;
+		addTime = 0.1;
+		interval = 100;
+		clearInterval(speed);
+		speed = setInterval(setup , interval);
+	} else {
+		document.getElementById('fast').style.backgroundColor = "lightgreen";
+		document.getElementById('fast').value = "FAST Enabled";
+		fastEnabled = true;
+		addTime = 0.05;
+		interval = 50;
+		clearInterval(speed);
+		speed = setInterval(setup , interval);
+	}
+}
+
+function setTurbo() {
+	if(turboEnabled) {
+		document.getElementById('turbo').style.backgroundColor = "red";
+		document.getElementById('turbo').value = "TURBO Disabled";
+		turboEnabled = false;
+		addTime = 0.1;
+		interval = 100;
+		clearInterval(speed);
+		speed = setInterval(setup , interval);
+	} else {
+		document.getElementById('turbo').style.backgroundColor = "lightgreen";
+		document.getElementById('turbo').value = "TURBO Enabled";
+		turboEnabled = true;
+		addTime = 0.025;
+		interval = 25;
+		clearInterval(speed);
+		speed = setInterval(setup , interval);
+	}
+}
+
+
+snake = new Snake();
+apple = new Apple();
+apple.generate();
+
+function setup() {
+
 		c.clearRect(0, 0, canvas.width, canvas.height);
 		apple.draw();
 		snake.update();
@@ -42,18 +89,15 @@ var apple
 			window.location.reload(true);
 		}
 
-	}, 100);
-
 	window.addEventListener('keydown', ((evt) => {
 		const direction = evt.key;
 		snake.changeDirection(direction);
 	}))
 
-	let timer = 0
-
 	function increaseTimer() {
-		timer += 0.1;
+		timer += addTime;
 		document.querySelector('#timer').innerHTML = Math.round(timer)
 	}
-
-}());
+	console.log(addTime)
+};
+ let speed = setInterval(setup , interval);
